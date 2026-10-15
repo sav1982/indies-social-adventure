@@ -28,20 +28,41 @@
 .stage.play .taylor{animation:gentleGreeting 2.7s ease-in-out}
 @keyframes gentleGreeting{0%,100%{transform:translateY(0)}40%{transform:translateY(-6px) rotate(-2deg)}}
 @media(prefers-reduced-motion:reduce){.actor.talking img,.stage.play .taylor{animation:none!important}}
+
+/* V19: first layered character-rig prototype. The torso stays still while
+   the head moves independently; no floating arm or whole-photo wobble. */
+.actor .portrait-rig{position:relative;width:100%;height:100%;transform-origin:50% 95%;animation:rigBreath 3.8s ease-in-out infinite}
+.actor .portrait-rig img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center bottom;border-radius:16px;filter:none}
+.actor .portrait-rig .rig-body{mask-image:linear-gradient(to bottom,transparent 0%,transparent 57%,black 68%,black 100%);-webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent 57%,black 68%,black 100%)}
+.actor .portrait-rig .rig-head{mask-image:linear-gradient(to bottom,black 0%,black 58%,transparent 68%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,black 0%,black 58%,transparent 68%,transparent 100%);transform-origin:50% 63%;transition:transform .35s ease}
+.actor.talking .portrait-rig .rig-head{animation:headTalk .64s ease-in-out infinite alternate}
+.actor.attending .portrait-rig .rig-head{transform:rotate(-2deg)}
+.actor.thinking .portrait-rig .rig-head,.actor.look-away .portrait-rig .rig-head{transform:rotate(4deg) translateY(2px)}
+.actor.bright .portrait-rig .rig-head{transform:rotate(-3deg) translateY(-2px)}
+.actor.reassuring .portrait-rig .rig-head{transform:rotate(2deg)}
+.actor .portrait-rig img{animation:none!important}
+.actor.talking img,.actor.look-away img,.actor.bright img,.actor.thinking img,.actor.attending img,.actor.reassuring img{animation:none}
+.actor.look-away img,.actor.bright img,.actor.thinking img,.actor.attending img,.actor.reassuring img{filter:none;transform:none}
+.stage.play .taylor{animation:none}
+.stage.play .indie{animation:none}
+.stage.play.walk .indie{animation:walk 2.7s ease-in-out forwards}
+@keyframes headTalk{from{transform:rotate(-1.1deg) translateY(0)}to{transform:rotate(1.1deg) translateY(1px)}}
+@keyframes rigBreath{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@media(prefers-reduced-motion:reduce){.actor .portrait-rig,.actor.talking .portrait-rig .rig-head{animation:none!important}}
 </style></head><body><main class="app"><header class="top"><div class="brand">🐴 Indie's Social Adventure</div><div class="pill" id="stepLabel">The hello moment</div></header><div class="progress" aria-hidden="true"><div id="bar"></div></div>
 <section id="step0" class="step active card"><h2>Someone says hello 💗</h2><p class="intro">Watch Indie and Taylor in one little cartoon scene. Tap Play to begin.</p>
 <div id="stage" class="stage" role="group" aria-label="Illustrated school scene with Indie and Taylor">
-<div id="taylorActor" class="actor taylor"><img id="taylorFace" src="taylor_friendly.png" alt="Taylor, smiling"><span id="waveHand" class="hidden" aria-hidden="true"></span></div><div id="indieActor" class="actor indie"><img id="indieFace" src="indie_calm.png" alt="Indie wearing pink glasses"><span id="indieGesture" class="indie-gesture hidden" aria-hidden="true">💭</span></div>
+<div id="taylorActor" class="actor taylor"><div class="portrait-rig"><img id="taylorBody" class="rig-body" src="taylor_friendly.png" alt=""><img id="taylorFace" class="rig-head" src="taylor_friendly.png" alt="Taylor, smiling"></div><span id="waveHand" class="hidden" aria-hidden="true"></span></div><div id="indieActor" class="actor indie"><div class="portrait-rig"><img id="indieBody" class="rig-body" src="indie_calm.png" alt=""><img id="indieFace" class="rig-head" src="indie_calm.png" alt="Indie wearing pink glasses"></div><span id="indieGesture" class="indie-gesture hidden" aria-hidden="true">💭</span></div>
 <div id="taylorBubble" class="bubble taylor hidden" aria-live="polite"></div><div id="indieBubble" class="bubble indie hidden" aria-live="polite"></div></div>
 <div class="caption" id="caption" aria-live="polite">Taylor notices Indie at school.</div>
-<div class="actions"><button class="btn primary" id="play">▶ Play the scene</button><button class="btn" id="replay">↻ Replay</button><button class="btn" id="sound">🔊 Sound on</button></div>
+<div class="actions"><button class="btn" id="replayLine">🔊 Hear that line again</button><button class="btn primary" id="play">▶ Play the scene</button><button class="btn" id="replay">↻ Replay</button><button class="btn" id="sound">🔊 Sound on</button></div>
 <div id="chooseArea" class="hidden"><h3>What could Indie do?</h3><p class="intro">There are different ways to respond. Choose one to see what happens.</p><div class="choices" id="choices"></div><div class="actions"><button class="btn primary" id="seeOutcome" disabled>See what happens →</button></div></div>
 <div id="afterArea" class="hidden"><div class="feedback" id="outcomeExplanation"></div><div class="actions"><button class="btn" id="tryAgain">↻ Try another response</button><button class="btn primary" id="toFeelings">Explore feelings →</button></div></div>
-<p class="scene-note">You can pause, replay, or choose again. This is a simple illustrated animation, not a full cartoon video.</p></section>
+<p class="scene-note">You can pause, replay, or choose again. This is a prototype of independently moving heads and bodies, not yet a full cartoon.</p></section>
 <section id="step1" class="step card"><h2>What might Taylor be feeling? 🔎</h2><p>Look at her face, words and body language. They give clues, but we cannot know exactly how someone feels just by looking.</p><div class="feelings"><button class="btn" data-taylor="friendly">😊 Friendly</button><button class="btn" data-taylor="unsure">🤔 Unsure</button><button class="btn" data-taylor="unknown">💭 Not sure</button></div><div class="feedback hidden" id="taylorFeedback" aria-live="polite"></div><div class="actions"><button class="btn" id="backStory">← Watch again</button><button class="btn primary" id="toIndieFeelings">How might Indie feel? →</button></div></section>
 <section id="step2" class="step card"><h2>What's happening inside Indie? 💗</h2><p>Indie might feel different things in different situations. More than one answer could fit.</p><div class="feelings"><button class="btn" data-indie="nervous">🦋 Nervous</button><button class="btn" data-indie="quiet">🌿 Wanting quiet</button><button class="btn" data-indie="unsure">💭 Unsure</button><button class="btn" data-indie="ready">🌟 Ready to chat</button></div><div class="feedback hidden" id="indieFeedback" aria-live="polite"></div><div class="feedback"><strong>Remember:</strong> It's okay to take your time, ask for space, or say hello in your own way. You don't have to make eye contact to be kind.</div><div class="actions"><button class="btn" id="backTaylor">← Back</button><button class="btn primary" id="finish">Finish the story →</button></div></section>
 <section id="step3" class="step card end"><div class="badge">🏅</div><h2>Hello Hero!</h2><p>You explored choices, noticed expressions and thought about feelings. That's something to celebrate!</p><div class="feedback" id="badgeStatus">Your Hello Hero badge is yours for exploring, not for picking a particular answer.</div><div class="actions" style="justify-content:center"><button class="btn primary" id="restart">↻ Play again</button><button class="btn" id="hearBadge">🔊 Hear your celebration</button></div></section>
-<div class="card" style="text-align:center"><h3>Ready for another adventure?</h3><p>Try joining a conversation with Taylor.</p><a class="btn primary" href="lesson2.html" style="display:inline-block;text-decoration:none">🌟 Lesson 2: Joining In →</a></div><div class="footer">Version 17 · A simple hello, calmer movement and two lessons</div></main>
+<div class="card" style="text-align:center"><h3>Ready for another adventure?</h3><p>Try joining a conversation with Taylor.</p><a class="btn primary" href="lesson2.html" style="display:inline-block;text-decoration:none">🌟 Lesson 2: Joining In →</a></div><div class="footer">Version 19 · A simple hello, calmer movement and two lessons</div></main>
 <script>
 const $=id=>document.getElementById(id);
 const choices=[
@@ -50,19 +71,47 @@ const choices=[
 {emoji:'🌿',title:'Ask for a little space',line:'Hi. I need a quiet moment.',reply:'Okay, see you later!',indie:'indie_unsure.png',taylor:'taylor_curious.png',explain:'Indie asks for space. Taylor may understand that Indie needs a break. It is okay to ask for what you need.'},
 {emoji:'🚶',title:'Look down and walk past',line:'',reply:'',indie:'indie_nervous.png',taylor:'taylor_thinking.png',explain:'Indie walks past without speaking. She may be overwhelmed, distracted, or simply not ready. Taylor might feel unsure what happened. We cannot know either person’s feelings for certain.'}
 ];
-let selected=-1,muted=false,timers=[],sceneToken=0,sceneState='start';
+let selected=-1,muted=false,timers=[],sceneToken=0,sceneState='start',lastLine='';
 function clearScene(){sceneToken++;timers.forEach(clearTimeout);timers=[];if('speechSynthesis'in window)speechSynthesis.cancel();$('stage').className='stage';$('waveHand').classList.add('hidden');$('indieGesture').classList.add('hidden');$('taylorActor').classList.remove('bright','thinking','blink','look-away','talking','attending','reassuring');$('indieActor').classList.remove('bright','thinking','blink','look-away','talking','attending','reassuring')}
 function later(fn,ms){timers.push(setTimeout(fn,ms))}
-function speak(t){if(!muted&&'speechSynthesis'in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='en-AU';u.rate=.87;let vs=speechSynthesis.getVoices(),au=vs.find(v=>v.lang.toLowerCase()==='en-au');if(au)u.voice=au;speechSynthesis.speak(u)}}
-function bubble(who,text){$('taylorBubble').classList.toggle('hidden',who!=='taylor'||!text);$('indieBubble').classList.toggle('hidden',who!=='indie'||!text);if(text)$(who+'Bubble').textContent=text}
-function setFaces(i='indie_calm.png',t='taylor_friendly.png'){$('indieFace').src=i;$('taylorFace').src=t}
+function speak(t,done){
+ const token=sceneToken;
+ if(muted||!('speechSynthesis' in window)){if(done)later(done,900);return}
+ const synth=window.speechSynthesis;
+ synth.cancel();
+ let finished=false;
+ const complete=()=>{if(finished)return;finished=true;if(token===sceneToken&&done)done()};
+ try{
+  const u=new SpeechSynthesisUtterance(t);u.lang='en-AU';u.rate=.86;
+  const au=synth.getVoices().find(v=>v.lang.toLowerCase()==='en-au');if(au)u.voice=au;
+  u.onend=complete;u.onerror=complete;
+  // A safety fallback for devices that never fire onend. No next line can interrupt too early.
+  const fallback=Math.max(2400,Math.min(11500,t.length*115+1400));later(complete,fallback);
+  synth.speak(u);
+ }catch(e){if(done)later(done,1000)}
+}
+
+function bubble(who,text){if(text)lastLine=text;$('taylorBubble').classList.toggle('hidden',who!=='taylor'||!text);$('indieBubble').classList.toggle('hidden',who!=='indie'||!text);if(text)$(who+'Bubble').textContent=text}
+function setFaces(i='indie_calm.png',t='taylor_friendly.png'){$('indieFace').src=i;$('indieBody').src=i;$('taylorFace').src=t;$('taylorBody').src=t}
 function pose(id,kind){$(id).classList.remove('bright','thinking','look-away','talking','attending','reassuring');if(kind)$(id).classList.add(kind)}
 function blink(id){const a=$(id);a.classList.remove('blink');void a.offsetWidth;a.classList.add('blink');later(()=>a.classList.remove('blink'),300)}
 function show(n){clearScene();document.querySelectorAll('.step').forEach((x,i)=>x.classList.toggle('active',i===n));$('bar').style.width=([25,55,80,100][n])+'%';$('stepLabel').textContent=['The hello moment','Taylor’s feelings','Indie’s feelings','Hello Hero!'][n];window.scrollTo({top:0,behavior:'instant'});if(n===3){try{localStorage.setItem('indie-hello-hero','earned')}catch(e){}}}
-function greeting(){clearScene();sceneState='greeting';$('chooseArea').classList.add('hidden');$('afterArea').classList.add('hidden');setFaces();bubble('', '');$('caption').textContent='Taylor notices Indie at school.';$('stage').classList.add('play');later(()=>{pose('taylorActor','talking');pose('indieActor','attending');blink('taylorActor');bubble('taylor','Hi Indie!');$('caption').textContent='Taylor smiles, waves and says hello.';speak('Hi Indie!')},450);later(()=>{pose('taylorActor','');pose('indieActor','');blink('indieActor');$('stage').classList.remove('play');$('caption').textContent='Indie can decide how she wants to respond.';$('chooseArea').classList.remove('hidden');sceneState='choose'},2700)}
-function outcome(){if(selected<0)return;clearScene();sceneState='outcome';const c=choices[selected];setFaces(c.indie,c.taylor);bubble('','');$('afterArea').classList.add('hidden');$('chooseArea').classList.add('hidden');$('caption').textContent='Watch what happens next.';$('stage').classList.add('play');if(selected===3){$('stage').classList.add('walk');pose('indieActor','look-away')}else if(selected===2){$('stage').classList.add('pause');pose('indieActor','thinking');$('indieGesture').textContent='🌿';$('indieGesture').classList.remove('hidden')}else{pose('indieActor','bright');$('indieGesture').textContent=selected===0?'💬':'👋';$('indieGesture').classList.remove('hidden')}later(()=>{if(c.line){if(selected!==3)pose('indieActor','talking');blink('indieActor');bubble('indie',c.line);$('caption').textContent='Indie: '+c.line;speak(c.line)}else{$('caption').textContent='Indie looks down and walks past.'}},500);later(()=>{if(c.reply){$('indieGesture').classList.add('hidden');pose('indieActor','attending');pose('taylorActor','talking');blink('taylorActor');bubble('taylor',c.reply);$('caption').textContent='Taylor: '+c.reply;speak(c.reply)}else{$('indieGesture').classList.add('hidden');pose('taylorActor','thinking');blink('taylorActor');bubble('', '');$('caption').textContent='Taylor pauses, looking a little unsure.'}},2300);later(()=>{$('stage').classList.remove('play','walk','pause');pose('taylorActor','');pose('indieActor','');$('outcomeExplanation').textContent=c.explain;$('afterArea').classList.remove('hidden');sceneState='done'},4300)}
+function greeting(){
+ clearScene();sceneState='greeting';lastLine='';$('chooseArea').classList.add('hidden');$('afterArea').classList.add('hidden');setFaces();bubble('','');$('caption').textContent='Taylor notices Indie at school.';$('stage').classList.add('play');
+ later(()=>{pose('taylorActor','talking');pose('indieActor','attending');blink('taylorActor');bubble('taylor','Hi Indie!');$('caption').textContent='Taylor smiles and says hello.';
+ speak('Hi Indie!',()=>{pose('taylorActor','');pose('indieActor','');blink('indieActor');$('stage').classList.remove('play');$('caption').textContent='Indie can decide how she wants to respond.';$('chooseArea').classList.remove('hidden');sceneState='choose'});
+ },450);
+}
+function outcome(){
+ if(selected<0)return;clearScene();sceneState='outcome';lastLine='';const c=choices[selected];setFaces(c.indie,c.taylor);bubble('','');$('afterArea').classList.add('hidden');$('chooseArea').classList.add('hidden');$('caption').textContent='Watch what happens next.';$('stage').classList.add('play');if(selected===3){$('stage').classList.add('walk');pose('indieActor','look-away')}else if(selected===2){$('stage').classList.add('pause');pose('indieActor','thinking')}else{pose('indieActor','bright')}
+ const finish=()=>{$('stage').classList.remove('play','walk','pause');pose('taylorActor','');pose('indieActor','');$('outcomeExplanation').textContent=c.explain;$('afterArea').classList.remove('hidden');sceneState='done'};
+ const reply=()=>{if(c.reply){pose('indieActor','attending');pose('taylorActor','talking');blink('taylorActor');bubble('taylor',c.reply);$('caption').textContent='Taylor: '+c.reply;speak(c.reply,()=>{pose('taylorActor','');finish()})}else{bubble('','');pose('taylorActor','thinking');$('caption').textContent='Taylor pauses, looking a little unsure.';later(finish,1200)}};
+ later(()=>{if(c.line){pose('indieActor','talking');blink('indieActor');bubble('indie',c.line);$('caption').textContent='Indie: '+c.line;speak(c.line,()=>{pose('indieActor','');later(reply,450)})}else{$('caption').textContent='Indie looks down and walks past.';later(reply,1300)}},500);
+}
+
 choices.forEach((c,i)=>{let b=document.createElement('button');b.className='choice';b.innerHTML='<span class="emoji" aria-hidden="true">'+c.emoji+'</span><span>'+c.title+'</span>';b.onclick=()=>{selected=i;document.querySelectorAll('.choice').forEach((x,j)=>{x.classList.toggle('selected',i===j);x.setAttribute('aria-pressed',String(i===j))});$('seeOutcome').disabled=false};$('choices').append(b)});
 $('play').onclick=greeting;$('replay').onclick=()=>sceneState==='done'?outcome():greeting();$('seeOutcome').onclick=outcome;$('tryAgain').onclick=()=>{selected=-1;$('seeOutcome').disabled=true;document.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));greeting()};$('toFeelings').onclick=()=>show(1);$('backStory').onclick=()=>{show(0);outcome()};$('toIndieFeelings').onclick=()=>show(2);$('backTaylor').onclick=()=>show(1);$('finish').onclick=()=>show(3);$('restart').onclick=()=>{selected=-1;$('seeOutcome').disabled=true;document.querySelectorAll('.choice').forEach(x=>x.classList.remove('selected'));show(0);$('chooseArea').classList.add('hidden');$('afterArea').classList.add('hidden');bubble('','');setFaces();$('caption').textContent='Taylor notices Indie at school.'};
+$('replayLine').onclick=()=>{if(lastLine)speak(lastLine)};
 $('sound').onclick=()=>{muted=!muted;$('sound').textContent=muted?'🔇 Sound off':'🔊 Sound on';if(muted)speechSynthesis?.cancel()};
 const taylorMessages={friendly:'Taylor smiled and greeted Indie. She might be feeling friendly or pleased.',unsure:'Taylor might be unsure what Indie is thinking, especially if Indie walked past.',unknown:'Exactly. Expressions and gestures are clues, not definite answers. We could ask Taylor how she feels.'};
 document.querySelectorAll('[data-taylor]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-taylor]').forEach(x=>x.classList.toggle('selected',x===b));$('taylorFeedback').textContent=taylorMessages[b.dataset.taylor];$('taylorFeedback').classList.remove('hidden');speak(taylorMessages[b.dataset.taylor])});
