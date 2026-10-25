@@ -49,7 +49,7 @@
 @keyframes headTalk{from{transform:rotate(-1.1deg) translateY(0)}to{transform:rotate(1.1deg) translateY(1px)}}
 @keyframes rigBreath{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 @media(prefers-reduced-motion:reduce){.actor .portrait-rig,.actor.talking .portrait-rig .rig-head{animation:none!important}}
- .runway-opening{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#d6eafa;z-index:7}.runway-opening.hidden{display:none!important}</style></head><body><main class="app"><header class="top"><div class="brand">🐴 Indie's Social Adventure</div><div class="pill" id="stepLabel">The hello moment</div></header><div class="progress" aria-hidden="true"><div id="bar"></div></div>
+ .runway-opening{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#d6eafa;z-index:7}.runway-opening.hidden{display:none!important} .stage:not(.video-active) .actor,.stage.video-active .actor{display:none!important} .stage:not(.video-active){background:#cdeaf5 url('school_scene.png') center/cover} .stage.video-active:before{display:none} </style></head><body><main class="app"><header class="top"><div class="brand">🐴 Indie's Social Adventure</div><div class="pill" id="stepLabel">The hello moment</div></header><div class="progress" aria-hidden="true"><div id="bar"></div></div>
 <section id="step0" class="step active card"><h2>Someone says hello 💗</h2><p class="intro">Watch Indie and Taylor in one little cartoon scene. Tap Play to begin.</p>
 <div id="stage" class="stage" role="group" aria-label="Illustrated school scene with Indie and Taylor"><video id="weekendVideo" class="runway-opening hidden" playsinline preload="metadata" muted aria-label="Indie and Taylor discuss their weekend"><source src="weekend-conversation.mp4" type="video/mp4"></video><video id="helloVideo" class="runway-opening hidden" playsinline preload="metadata" aria-label="Indie says hello to Taylor"><source src="short-hello.mp4" type="video/mp4"></video><video id="quietVideo" class="runway-opening hidden" playsinline preload="metadata" aria-label="Indie asks for a quiet moment"><source src="quiet-moment.mp4" type="video/mp4"></video><video id="walkVideo" class="runway-opening hidden" playsinline preload="metadata" aria-label="Indie walks past Taylor"><source src="walk-past.mp4" type="video/mp4"></video><video id="runwayOpening" class="runway-opening hidden" playsinline preload="metadata" aria-label="Taylor waves hello to Indie"><source src="https://raw.githubusercontent.com/sav1982/indies-social-adventure/lesson1-runway-prototype/Animate%20the%20supplied%20illustration%20faithfully%20as%20a%20gentle%205-s.mp4" type="video/mp4"></video>
 <div id="taylorActor" class="actor taylor"><div class="portrait-rig"><img id="taylorBody" class="rig-body" src="taylor_friendly.png" alt=""><img id="taylorFace" class="rig-head" src="taylor_friendly.png" alt="Taylor, smiling"></div><span id="waveHand" class="hidden" aria-hidden="true"></span></div><div id="indieActor" class="actor indie"><div class="portrait-rig"><img id="indieBody" class="rig-body" src="indie_calm.png" alt=""><img id="indieFace" class="rig-head" src="indie_calm.png" alt="Indie wearing pink glasses"></div><span id="indieGesture" class="indie-gesture hidden" aria-hidden="true">💭</span></div>
@@ -72,7 +72,7 @@ const choices=[
 {emoji:'🚶',title:'Look down and walk past',line:'',reply:'',indie:'indie_nervous.png',taylor:'taylor_thinking.png',explain:'Indie walks past without speaking. She may be overwhelmed, distracted, or simply not ready. Taylor might feel unsure what happened. We cannot know either person’s feelings for certain.'}
 ];
 let selected=-1,muted=false,timers=[],sceneToken=0,sceneState='start',lastLine='';
-function clearScene(){const v=$('runwayOpening');if(v){v.pause();v.classList.add('hidden')}for(const id of ['weekendVideo','helloVideo','walkVideo','quietVideo']){const w=$(id);if(w){w.pause();w.classList.add('hidden')}}sceneToken++;timers.forEach(clearTimeout);timers=[];if('speechSynthesis'in window)speechSynthesis.cancel();$('stage').className='stage';$('waveHand').classList.add('hidden');$('indieGesture').classList.add('hidden');$('taylorActor').classList.remove('bright','thinking','blink','look-away','talking','attending','reassuring');$('indieActor').classList.remove('bright','thinking','blink','look-away','talking','attending','reassuring')}
+function clearScene(){$('stage').classList.remove('video-active');const v=$('runwayOpening');if(v){v.pause();v.classList.add('hidden')}for(const id of ['weekendVideo','helloVideo','walkVideo','quietVideo']){const w=$(id);if(w){w.pause();w.classList.add('hidden')}}sceneToken++;timers.forEach(clearTimeout);timers=[];if('speechSynthesis'in window)speechSynthesis.cancel();$('stage').className='stage';$('waveHand').classList.add('hidden');$('indieGesture').classList.add('hidden');$('taylorActor').classList.remove('bright','thinking','blink','look-away','talking','attending','reassuring');$('indieActor').classList.remove('bright','thinking','blink','look-away','talking','attending','reassuring')}
 function later(fn,ms){timers.push(setTimeout(fn,ms))}
 function speak(t,done){
  const token=sceneToken;
@@ -98,18 +98,18 @@ function blink(id){const a=$(id);a.classList.remove('blink');void a.offsetWidth;
 function show(n){clearScene();document.querySelectorAll('.step').forEach((x,i)=>x.classList.toggle('active',i===n));$('bar').style.width=([25,55,80,100][n])+'%';$('stepLabel').textContent=['The hello moment','Taylor’s feelings','Indie’s feelings','Hello Hero!'][n];window.scrollTo({top:0,behavior:'instant'});if(n===3){try{localStorage.setItem('indie-hello-hero','earned')}catch(e){}}}
 function greeting(){
  clearScene();sceneState='greeting';lastLine='Hi Indie!';$('chooseArea').classList.add('hidden');$('afterArea').classList.add('hidden');setFaces();bubble('','');$('caption').textContent='Taylor waves and says: Hi Indie!';
- const v=$('runwayOpening');v.classList.remove('hidden');v.currentTime=0;v.muted=muted;
- let completed=false;const finish=()=>{if(completed||sceneState!=='greeting')return;completed=true;v.pause();v.classList.add('hidden');$('caption').textContent='Indie can decide how she wants to respond.';$('chooseArea').classList.remove('hidden');sceneState='choose';};
+ const v=$('runwayOpening');$('stage').classList.add('video-active');v.classList.remove('hidden');v.currentTime=0;v.muted=muted;
+ let completed=false;const finish=()=>{if(completed||sceneState!=='greeting')return;completed=true;v.pause();$('caption').textContent='Indie can decide how she wants to respond.';$('chooseArea').classList.remove('hidden');sceneState='choose';};
  v.onended=finish;v.onerror=()=>{v.classList.add('hidden');$('caption').textContent='Taylor says: Hi Indie!';bubble('taylor','Hi Indie!');speak('Hi Indie!',finish)};
  const promise=v.play();if(promise&&promise.catch)promise.catch(()=>{v.classList.add('hidden');$('caption').textContent='Tap Play the scene again if the animation did not start.';});
 }
 
 function weekendOutcome(){
  clearScene();sceneState='weekend';lastLine='';$('afterArea').classList.add('hidden');$('chooseArea').classList.add('hidden');
- const v=$('weekendVideo');v.currentTime=0;v.muted=muted;v.classList.remove('hidden');
+ const v=$('weekendVideo');$('stage').classList.add('video-active');v.currentTime=0;v.muted=muted;v.classList.remove('hidden');
  const lines=[['indie','Hi Taylor! How was your weekend?',0.35],['taylor','Good, thanks! I went horse riding.',3.8],['indie','Really? That sounds fun!',7.25]];
  let next=0,finished=false;
- function finish(){if(finished||sceneState!=='weekend')return;finished=true;v.pause();v.classList.add('hidden');bubble('','');$('outcomeExplanation').textContent=choices[0].explain;$('afterArea').classList.remove('hidden');sceneState='done'}
+ function finish(){if(finished||sceneState!=='weekend')return;finished=true;v.pause();bubble('','');$('outcomeExplanation').textContent=choices[0].explain;$('afterArea').classList.remove('hidden');sceneState='done'}
  v.ontimeupdate=()=>{while(next<lines.length&&v.currentTime>=lines[next][2]){const [who,line]=lines[next++];bubble(who,line);$('caption').textContent=(who==='indie'?'Indie: ':'Taylor: ')+line;lastLine=line}};
  v.onended=finish;v.onerror=()=>{v.classList.add('hidden');$('caption').textContent='The weekend video could not load. Please try again.';finish()};
  const p=v.play();if(p&&p.catch)p.catch(()=>v.onerror());
@@ -117,10 +117,10 @@ function weekendOutcome(){
 
 function clipOutcome(index){
  clearScene();sceneState='clip';lastLine='';$('afterArea').classList.add('hidden');$('chooseArea').classList.add('hidden');bubble('','');
- const c=choices[index],v=$(index===1?'helloVideo':index===2?'quietVideo':'walkVideo');v.currentTime=0;v.muted=muted;v.classList.remove('hidden');
+ const c=choices[index],v=$(index===1?'helloVideo':index===2?'quietVideo':'walkVideo');$('stage').classList.add('video-active');v.currentTime=0;v.muted=muted;v.classList.remove('hidden');
  $('caption').textContent=index===1?'Indie gives Taylor a short hello.':index===2?'Indie asks for a quiet moment.':'Indie looks down and walks past Taylor.';
  let finished=false;
- const finish=()=>{if(finished||sceneState!=='clip')return;finished=true;v.pause();v.classList.add('hidden');$('outcomeExplanation').textContent=c.explain;$('afterArea').classList.remove('hidden');sceneState='done'};
+ const finish=()=>{if(finished||sceneState!=='clip')return;finished=true;v.pause();$('outcomeExplanation').textContent=c.explain;$('afterArea').classList.remove('hidden');sceneState='done'};
  v.onended=finish;v.onerror=()=>{v.classList.add('hidden');$('caption').textContent='The animation could not load. Please try again.';later(finish,1500)};
  const p=v.play();if(p&&p.catch)p.catch(()=>v.onerror());
 }
