@@ -44,7 +44,7 @@ const clues={
 };
 expressions.push({title:'Tired',emoji:'🥱',clue:'Heavy eyelids, yawning or low energy can suggest tiredness. Being tired is not the same as being bored with someone.'});
 expressions.forEach((e,i)=>{
-const portrait='taylor_'+(e.title==='Happy or friendly'?'happy':e.title.toLowerCase())+'_expression.png';
+const portrait=e.title==='Unsure'?'taylor_thoughtful.png':'taylor_'+(e.title==='Happy or friendly'?'happy':e.title.toLowerCase())+'_expression.png';
 const b=document.createElement('button');b.className='face';
 const fallback=e.img||'taylor_thoughtful.png';
 b.innerHTML='<img src="'+portrait+'" alt="'+e.title+' expression portrait"><strong>'+e.title+'</strong>';
