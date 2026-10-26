@@ -30,7 +30,8 @@ return '<svg class="character-art" viewBox="0 0 320 270" role="img" aria-label="
 \nconst $=id=>document.getElementById(id);let step=0,question=0;
 function show(n){step=n;document.querySelectorAll('.step').forEach((e,i)=>e.classList.toggle('active',i===n));$('bar').style.width=((n+1)/6*100)+'%';if(n===2){question=0;renderScenario()}if(n===5){try{localStorage.setItem('indie-body-language-detective','earned')}catch(e){}}window.scrollTo(0,0)}
 document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>show(Math.min(5,step+1)));document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>show(Math.max(0,step-1)));
-$('openingArt').insertAdjacentHTML('afterbegin',characterArt('wave','taylor'));$('conversationArt').insertAdjacentHTML('afterbegin',characterArt('open','taylor'));\nconst gestures=[
+$('openingArt').insertAdjacentHTML('afterbegin',characterArt('wave','taylor'));$('conversationArt').insertAdjacentHTML('afterbegin',characterArt('open','taylor'));
+const gestures=[
 ['👋','Waving','A wave might mean hello, goodbye or “over here!” Look at what is happening.'],
 ['🙂','Nodding','A nod might show someone is listening, encouraging you or agreeing. It does not always mean agreement.'],
 ['🙆','Turning towards','Turning towards someone can show attention. People can also listen while facing elsewhere.'],
